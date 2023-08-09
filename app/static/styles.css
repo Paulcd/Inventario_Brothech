@@ -1,0 +1,38 @@
+body {
+  background-color: #007bff;
+}
+
+.title-h1 {
+  font-family: sans-serif;
+  color: #007bff;
+}
+
+.login-box {
+  padding-bottom: 15px;
+  background-color: white;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.login-box input {
+  width: 90%;
+  height: 30px;
+  margin: 0.5rem;
+}
+
+.login-button {
+  border: none;
+  background: #007bff;
+  color: white;
+  cursor: pointer;
+}
