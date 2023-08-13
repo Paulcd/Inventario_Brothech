@@ -1,0 +1,31 @@
+
+    <h2>Users</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.username }}</td>
+                <td>
+                    <a href="/delete_user/{{ user.id }}" class="btn btn-sm btn-danger">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Crear Usuario</h2>
+    <form action="/create_user" method="post">
+        <div class="form-group">
+            <label for="username">Usuario</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+            <label for="password">Contraseña</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Crear Usuario</button>
+    </form>
