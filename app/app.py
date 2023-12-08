@@ -19,6 +19,25 @@ class Product:
         self.manufacturer = manufacturer
         self.supplier = supplier
 
+def quicksort_products(products):
+    if len(products) <= 1:
+        return products
+    pivot = products[0].price
+    left = [product for product in products if product.price < pivot]
+    middle = [product for product in products if product.price == pivot]
+    right = [product for product in products if product.price > pivot]
+    return quicksort_products(left) + middle + quicksort_products(right)
+
+def quicksort_users(users):
+    if len(users) <= 1:
+        return users
+    pivot = users[0].username
+    left = [user for user in users if user.username < pivot]
+    middle = [user for user in users if user.username == pivot]
+    right = [user for user in users if user.username > pivot]
+    return quicksort_users(left) + middle + quicksort_users(right)
+
+
 @app.route("/")
 def index():
     if request.method == "POST":
@@ -34,7 +53,7 @@ def index():
     else:
         return render_template("index.html", logged_in=False)
 def load_users():
-    with open('users.csv', 'r') as file:
+    with open('users.csv', 'r', encoding='utf-8') as file:
         lines = file.readlines()
         users = []
         for line in lines:
@@ -47,7 +66,7 @@ def load_users():
     
 def load_products():
     try:
-        with open("products.csv", 'r') as file:
+        with open("products.csv", 'r', encoding='utf-8') as file:
             lines = file.readlines()
             products = []
             for line in lines:
@@ -66,7 +85,7 @@ def load_products():
         return []
 
 def save_products(products):
-    with open("products.csv", 'w') as file:
+    with open("products.csv", 'w', encoding='utf-8') as file:
         for product in products:
             file.write(f"{product.id},{product.name},{product.description},{product.category},{product.quantity},{product.price},{product.manufacturer},{product.supplier}\n")
 
@@ -78,7 +97,9 @@ def login():
     if validate_user(username, password):
         print(True)
         return redirect('/home')
-    return render_template('login.html')
+    return render_template('home.html')
+
+
 
 
 def validate_user(username, password):
@@ -151,7 +172,7 @@ def delete_product(product_id):
 
 
 def save_users():
-    with open('users.csv', 'w', newline='') as file:
+    with open('users.csv', 'w', newline='', encoding='utf-8') as file:
         writer = csv.writer(file) 
         for user in users:
             writer.writerow([user.id, user.username,user.password])
@@ -178,7 +199,25 @@ def delete_user(user_id):
     global users
     users = [user for user in users if user.id != user_id]
     save_users()
-    return redirect(url_for('home', redirect_from='users')) 
+    return redirect(url_for('home', redirect_from='users'))
+
+@app.route('/sort_products')
+def sort_products():
+    global products
+    products = load_products()
+    sorted_products = quicksort_products(products)
+    return render_template('inventory.html', products=sorted_products)
+
+@app.route('/sort_users')
+def sort_users():
+    global users
+    users = load_users()
+    sorted_users = quicksort_users(users)
+    return render_template('users.html', users=sorted_users)
+
+# if __name__ == "__main__":
+#     app.run(debug=True)
+
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=8080)
